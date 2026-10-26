@@ -12,11 +12,16 @@ Bet 1.0 is a small React app for browsing and submitting "challenges," such as a
 
 ![Submit Challenge page](./screenshots/submit-challenge.png)
 
+## Video Walkthrough
+
+![Bet 1.0 video walkthrough](./screenshots/walkthrough.gif)
+
 ## Features
 
 - **Explore Challenges** (`/`): displays every challenge as a card, sorted by `id`.
 - **Submit Challenge** (`/new`): a form with title, author, and description fields.
-- **Edit Post** (`/edit/:id`): edit or delete an existing challenge.
+- **Edit Post** (`/edit/:id`): edit or delete an existing challenge. Open it with the "more" icon on a challenge's card.
+- **Bet counter**: each card has a "👍 Bet Count" button that increments a counter.
 
 ## Tech Stack
 
@@ -50,6 +55,7 @@ src/
   - `title` (text)
   - `author` (text)
   - `description` (text)
+- Row Level Security policies on `Posts` that allow the `anon` role to `SELECT`, `INSERT`, `UPDATE`, and `DELETE`. Without them, Supabase rejects writes (an insert returns `401`, and updates and deletes silently affect no rows).
 
 ### Installation
 
@@ -81,6 +87,6 @@ The Supabase project URL and publishable key are set in [src/client.js](./src/cl
 
 ## Known Issues
 
-- **Posts are not saved yet.** The Submit Challenge form does not have a submit handler or an insert call, so new challenges are not written to Supabase.
-- **Supabase requests use the wrong URL path.** `client.js` sets the URL to end in `/rest/v1/`, and `supabase-js` adds `/rest/v1` again. Requests go to `/rest/v1/rest/v1/Posts`, which returns `PGRST125 Invalid path specified in request URL`. The Explore page therefore shows "No Challenges Yet" even when data exists. Setting the URL to the project root (without `/rest/v1/`) should fix it.
+- **Edit form starts empty.** `EditPost.jsx` does not load the existing challenge into the form, so submitting without retyping every field overwrites the challenge with empty values.
+- **Bet counts are not saved.** The count is local React state in `Card.jsx`, so it resets to 0 on reload and is not stored in Supabase.
 - **API key is in source code.** The key is hardcoded in `client.js`. It should move to a `.env` file that is excluded from Git.
